@@ -1,5 +1,41 @@
-# Comments & Reply
-This project involved designing and building a comment system using a tech stack that included React, Django REST framework, and PostgreSQL. The goal was to replicate the functionality and user experience of YouTube's comment section.
+# Comment System Application
+
+A full-stack comment system application with a Django backend and React frontend that allows users to create, read, update, and delete comments and replies.
+
+## Features
+
+- View a list of comments with author information and timestamps
+- Like comments
+- Reply to comments
+- View nested replies
+- Edit and delete comments/replies
+- Image support for comments
+- Responsive design
+
+## Tech Stack
+
+### Backend
+- Django (Python web framework)
+- PostgreSQL database
+- Django REST Framework for API endpoints
+
+### Frontend
+- React.js
+- CSS for styling
+- Fetch API for data communication
+
+## API Endpoints
+
+- `GET /api/comments/` - Get all comments
+- `POST /api/comments/` - Create a new comment
+- `GET /api/comments/<id>/` - Get a specific comment
+- `PUT /api/comments/<id>/` - Update a comment
+- `DELETE /api/comments/<id>/` - Delete a comment
+- `POST /api/replies/` - Create a new reply
+- `GET /api/comments/<comment_id>/replies/` - Get all replies for a comment
+- `GET /api/replies/<id>/` - Get a specific reply
+- `PUT /api/replies/<id>/` - Update a reply
+- `DELETE /api/replies/<id>/` - Delete a reply
 
 ## Setup
 ```bash
