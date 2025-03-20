@@ -7,6 +7,7 @@ git clone https://github.com/dustinyanreal/Comments_Replies.git
 cd Comments_Replies
 ```
 Inside the Comments_Replies folder, you will find a requirements.txt for pip installation
+
 **To install dependencies using requirements.txt with pip**
 ```bash
 pip install -r requirements.txt
