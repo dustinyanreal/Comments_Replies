@@ -6,7 +6,7 @@ const Comments = () => {
     const [text, setText] = useState('');
     const textareaRef = useRef(null);
     const [comments, setComments] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [replyingTo, setReplyingTo] = useState(null);
     const [replyText, setReplyText] = useState('');
     const replyTextareaRef = useRef(null);
@@ -16,6 +16,11 @@ const Comments = () => {
     const [editingReply, setEditingReply] = useState(null);
     const [editText, setEditText] = useState('');
     const editTextareaRef = useRef(null);
+
+    const[nextUrl, setNextUrl] = useState('http://localhost:8000/api/comments/')
+
+    //page
+    const [page, setPage] = useState(0);
 
     // Add these new functions to handle comment actions
 
@@ -164,18 +169,22 @@ const Comments = () => {
     }, [editText]);
 
     const fetchComments = async () => {
+        if (!nextUrl || loading) return;
+
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:8000/api/comments/')
+            const response = await fetch(nextUrl)
             if (!response.ok) {
                 throw new Error('Failed to fetch comments');
             }
             const data = await response.json();
-            setComments(data);
+            setComments([...comments, ...data.results])
+            setNextUrl(data.next)
+            setLoading(false)
         } catch (error) {
             console.error('Error fetching comments:', error);
         } finally {
-            setLoading(false);
+             setLoading(false);
         }
     }
 
@@ -374,7 +383,13 @@ const Comments = () => {
     }
 
     useEffect(() => {
-        fetchComments();
+        console.log("start of use effect: ", comments, loading)
+        if (!comments.length || !loading)
+        {
+            console.log("useeffect fetchcomments")
+            console.log(nextUrl)
+            fetchComments();
+        }
     }, []);
 
     useEffect(() => {
@@ -401,6 +416,8 @@ const Comments = () => {
             replyTextareaRef.current.style.height = scrollHeight + 'px';
         }
     }, [replyText]);
+
+
 
     return (
         <div className='comments'>
@@ -575,6 +592,10 @@ const Comments = () => {
                             </div>
                         ))
                     )}
+                </div>
+
+                <div>
+                    <button onClick={fetchComments} disabled={!nextUrl || loading}>{loading ? 'Loading...' : 'Load More'}</button>
                 </div>
             </div>
         </div>

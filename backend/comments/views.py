@@ -4,14 +4,20 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Comment, Reply 
 from .serializers import CommentSerializer, ReplySerializer
+from .pagination import CommentPagination
 
 # Create your views here.
 @api_view(['GET', 'POST'])
 def comment_list(request):
+    print("comment_l;ist")
     if request.method == 'GET':
-        comments = Comment.objects.all().order_by('-date')
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data)
+        comments = Comment.objects.all().order_by('-date', 'id')
+        print("after comments")
+        pagination = CommentPagination()
+        paginated_comments = pagination.paginate_queryset(comments, request)
+        serializer = CommentSerializer(paginated_comments, many=True)
+        return pagination.get_paginated_response(serializer.data)
+        #return Response(serializer.data)
 
 
 @api_view(['GET', 'PATCH', 'DELETE'])
@@ -22,6 +28,7 @@ def comment_detail(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
+        print("hitting comment detail")
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
     elif request.method == 'PATCH':
